@@ -12,7 +12,7 @@ public class WindowManager : MonoBehaviour {
         Debug.Log(scenename);
         if (scenename == "PhotonSpielplatz")
         {
-           // Instantiate(LoginPanel);
+           //Instantiate(LoginPanel);
         }
 	}
 	

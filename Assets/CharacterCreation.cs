@@ -59,7 +59,7 @@ public class CharacterCreation : MonoBehaviour {
         // for (int i = 0; i < 30; i++)
         //{
            // modLabels[i].text = (raceMods[i] + classMods[i]).ToString() ;
-      //  }
+      //  } TEEST
     }
     void GetClasses() {
         for (int i = 0; i < db.GetAll("classes").Length-1; i++ )
