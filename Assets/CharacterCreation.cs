@@ -26,10 +26,19 @@ public class CharacterCreation : MonoBehaviour {
     Databasemanager db;
     public int developmentPoints;
     public int attributePoints;
+    public Text dpLabel;
+    public Text attLabel;
+    public InputField charname;
+
+    public Button[] attributePlus;
+    public Button[] attributeMinus;
+    public Text[] attributeLevel;
+    public List<int> attributeSkilled;
 	// Use this for initialization
 	void Start () {
         ResetPoints();
         db = new Databasemanager();
+        attributeSkilled = new List<int>();
         for (int i = 0; i < 30; i++)
         {
             raceMods.Add(0);
@@ -45,11 +54,30 @@ public class CharacterCreation : MonoBehaviour {
             int temp = y;
             plusButtons[temp].onClick.AddListener(() => AddSkillLevel(temp));
             minusButtons[temp].onClick.AddListener(() => SubSkillLevel(temp));
+            
+            plusButtons[temp].enabled = false;
+            minusButtons[temp].enabled = false;
         }
+        for (int x = 0; x < 4; x++) {
+            int temp = x;
+                attributePlus[temp].onClick.AddListener(() => AddAttributeLevel(temp));
+                attributeMinus[temp].onClick.AddListener(() => SubAttributeLevel(temp));
+                attributePlus[temp].enabled = false;
+                attributeMinus[temp].enabled = false;
+        }
+
+        
 	}
     void ResetPoints() {
         developmentPoints = 1500;
         attributePoints = 30;
+        for (int i = 0; i < 30; i++) {
+            levelLabels[i].text = "0";
+        }
+        for (int x = 0; x < 4; x++)
+        {
+            attributeSkilled.Add(0);
+        }
     }
     void GetRaces() {
         for (int i = 0; i < db.GetAll("races").Length - 1; i++)
@@ -59,12 +87,21 @@ public class CharacterCreation : MonoBehaviour {
             racebtn.GetComponentInChildren<Text>().text = db.GetAll("races")[i];
             racebtn.onClick.AddListener(() => GetRaceByName(racebtn));
             racebtn.onClick.AddListener(() => SelectRace(racebtn));
-            Debug.Log("Races made");
         }
     }
     void SelectRace(Button chosen) {
         chosenRace.GetComponentInChildren<Text>().text = chosen.GetComponentInChildren<Text>().text;
         chosen.transform.parent.gameObject.SetActive(false);
+        if (chosenClass.GetComponentInChildren<Text>().text != "Choose a Class") {
+            for (int i = 0; i < 30; i++) {
+                plusButtons[i].enabled = true;
+                minusButtons[i].enabled = true;
+                if(i < 4) {
+                    attributeMinus[i].enabled = true;
+                    attributePlus[i].enabled = true;
+                }
+            }
+        }
     }
     void CalculateMods()
     {
@@ -88,6 +125,19 @@ public class CharacterCreation : MonoBehaviour {
     {
         chosenClass.GetComponentInChildren<Text>().text = chosen.GetComponentInChildren<Text>().text;
         chosen.transform.parent.gameObject.SetActive(false);
+        if (chosenRace.GetComponentInChildren<Text>().text != "Choose a Race")
+        {
+            for (int i = 0; i < 30; i++)
+            {
+                plusButtons[i].enabled = true;
+                minusButtons[i].enabled = true;
+                if (i < 4)
+                {
+                    attributeMinus[i].enabled = true;
+                    attributePlus[i].enabled = true;
+                }
+            }
+        }
     }
     void GetClassByName(Button cBtn) {
         for (int i = 0; i < 30; i++)
@@ -101,7 +151,6 @@ public class CharacterCreation : MonoBehaviour {
         for (int i = 0; i < 30; i++)
         {
             raceMods[i] = Convert.ToInt32(db.GetModsByName("racesbyname", cBtn.GetComponentInChildren<Text>().text)[i+2]);
-            Debug.Log(db.GetModsByName("racesbyname", cBtn.GetComponentInChildren<Text>().text)[i]);
         }
         CalculateMods();
     }
@@ -121,12 +170,30 @@ public class CharacterCreation : MonoBehaviour {
             levelLabels[skillnumber].text = leveldecrease.ToString();
         }
     }
+    void AddAttributeLevel(int attributenumber) {
+        if (attributePoints > 0) {
+            attributePoints--;
+            int tempLevel = Convert.ToInt32(attributeLevel[attributenumber].text) + 1;
+            Debug.Log(attributenumber);
+            attributeLevel[attributenumber].text = tempLevel.ToString();
+            attributeSkilled[attributenumber]++;
+        }
+    }
+    void SubAttributeLevel(int attributenumber) {
+        if (attributeSkilled[attributenumber] > 0) {
+            attributePoints++;
+            int tempLevel = Convert.ToInt32(attributeLevel[attributenumber].text) - 1;
+            attributeLevel[attributenumber].text = tempLevel.ToString();
+            attributeSkilled[attributenumber]--;
+        }
+    }
     int CalculateCosts(int skillnumber) {
         int costs = 50 + Convert.ToInt32(modLabels[skillnumber].text);
         return costs;
     }
 	// Update is called once per frame
-	void Update () {
-	
+	void FixedUpdate () {
+        dpLabel.text = "Developmentpoints: " + developmentPoints.ToString();
+        attLabel.text = "Attributepoints: " + attributePoints.ToString();
 	}
 }
