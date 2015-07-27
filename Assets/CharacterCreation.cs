@@ -24,8 +24,11 @@ public class CharacterCreation : MonoBehaviour {
     public Button chosenClass;
 
     Databasemanager db;
+    public int developmentPoints;
+    public int attributePoints;
 	// Use this for initialization
 	void Start () {
+        ResetPoints();
         db = new Databasemanager();
         for (int i = 0; i < 30; i++)
         {
@@ -38,7 +41,16 @@ public class CharacterCreation : MonoBehaviour {
         GetClasses();
         racePanel.SetActive(false);
         classPanel.SetActive(false);
+        for (int y = 0; y < plusButtons.Length; y++) {
+            int temp = y;
+            plusButtons[temp].onClick.AddListener(() => AddSkillLevel(temp));
+            minusButtons[temp].onClick.AddListener(() => SubSkillLevel(temp));
+        }
 	}
+    void ResetPoints() {
+        developmentPoints = 1500;
+        attributePoints = 30;
+    }
     void GetRaces() {
         for (int i = 0; i < db.GetAll("races").Length - 1; i++)
         {
@@ -56,10 +68,11 @@ public class CharacterCreation : MonoBehaviour {
     }
     void CalculateMods()
     {
-        // for (int i = 0; i < 30; i++)
-        //{
-           // modLabels[i].text = (raceMods[i] + classMods[i]).ToString() ;
-      //  } TEEST
+         for (int i = 0; i < 30; i++)
+        {
+            modLabels[i].text = (raceMods[i] + classMods[i]).ToString() ;
+        }
+         ResetPoints();
     }
     void GetClasses() {
         for (int i = 0; i < db.GetAll("classes").Length-1; i++ )
@@ -91,6 +104,26 @@ public class CharacterCreation : MonoBehaviour {
             Debug.Log(db.GetModsByName("racesbyname", cBtn.GetComponentInChildren<Text>().text)[i]);
         }
         CalculateMods();
+    }
+    void AddSkillLevel(int skillnumber) {
+        if(developmentPoints >= CalculateCosts(skillnumber) && levelLabels[skillnumber].text != "49") {
+            developmentPoints -= CalculateCosts(skillnumber);
+            int levelincrease = Convert.ToInt32(levelLabels[skillnumber].text) + 1;
+            levelLabels[skillnumber].text = levelincrease.ToString();
+        }
+    }
+    void SubSkillLevel(int skillnumber)
+    {
+        if (levelLabels[skillnumber].text != "0")
+        {
+            developmentPoints += CalculateCosts(skillnumber);
+            int leveldecrease = Convert.ToInt32(levelLabels[skillnumber].text) - 1;
+            levelLabels[skillnumber].text = leveldecrease.ToString();
+        }
+    }
+    int CalculateCosts(int skillnumber) {
+        int costs = 50 + Convert.ToInt32(modLabels[skillnumber].text);
+        return costs;
     }
 	// Update is called once per frame
 	void Update () {
