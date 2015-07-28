@@ -34,6 +34,7 @@ public class CharacterCreation : MonoBehaviour {
     public Button[] attributeMinus;
     public Text[] attributeLevel;
     public List<int> attributeSkilled;
+    public Button CreateBtn;
 	// Use this for initialization
 	void Start () {
         ResetPoints();
@@ -65,7 +66,7 @@ public class CharacterCreation : MonoBehaviour {
                 attributePlus[temp].enabled = false;
                 attributeMinus[temp].enabled = false;
         }
-
+        CreateBtn.onClick.AddListener(() => CreateCharacter());
         
 	}
     void ResetPoints() {
@@ -140,18 +141,25 @@ public class CharacterCreation : MonoBehaviour {
         }
     }
     void GetClassByName(Button cBtn) {
+        string[] response = db.GetModsByName("classesbyname", cBtn.GetComponentInChildren<Text>().text);
         for (int i = 0; i < 30; i++)
         {
-            classMods[i] = Convert.ToInt32(db.GetModsByName("classesbyname", cBtn.GetComponentInChildren<Text>().text)[i+2]);
+            classMods[i] = Convert.ToInt32(response[i+2]);
         }
         CalculateMods();
     }
     void GetRaceByName(Button cBtn)
     {
+        string[] response = db.GetModsByName("racesbyname", cBtn.GetComponentInChildren<Text>().text);
         for (int i = 0; i < 30; i++)
         {
-            raceMods[i] = Convert.ToInt32(db.GetModsByName("racesbyname", cBtn.GetComponentInChildren<Text>().text)[i+2]);
+            raceMods[i] = Convert.ToInt32(response[i + 2]); 
         }
+        attributeLevel[0].text = response[32];
+        attributeLevel[1].text = response[33];
+        attributeLevel[2].text = response[34];
+        attributeLevel[3].text = response[35];
+
         CalculateMods();
     }
     void AddSkillLevel(int skillnumber) {
@@ -196,4 +204,30 @@ public class CharacterCreation : MonoBehaviour {
         dpLabel.text = "Developmentpoints: " + developmentPoints.ToString();
         attLabel.text = "Attributepoints: " + attributePoints.ToString();
 	}
+    void CreateCharacter() {
+        List<string> gatheredValues = new List<string>();
+        //0 be the name, 1 be the Race, 2 be the class
+        gatheredValues.Add(charname.text);
+        gatheredValues.Add(chosenRace.GetComponentInChildren<Text>().text);
+        gatheredValues.Add(chosenClass.GetComponentInChildren<Text>().text);
+        for (int i = 0; i < 30; i++)
+        {
+            //3 - 32 are skills
+            gatheredValues.Add(levelLabels[i].text);
+        }
+        //33 - 36 are attributes
+        for (int y = 0; y < 4; y++) {
+            gatheredValues.Add(attributeLevel[y].text);
+        }
+        //37 is developmentpoints left
+        gatheredValues.Add(developmentPoints.ToString());
+        //38 is accId
+        var go = GameObject.Find("_ACCOUNTINFO");
+        Accountinformation ac = go.GetComponent<Accountinformation>();
+        gatheredValues.Add(ac.userId.ToString());
+        if (attributePoints == 0)
+        {
+            db.Create(gatheredValues);
+        }
+     }
 }
