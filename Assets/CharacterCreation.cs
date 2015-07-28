@@ -227,7 +227,7 @@ public class CharacterCreation : MonoBehaviour {
         gatheredValues.Add(ac.userId.ToString());
         if (attributePoints == 0)
         {
-            db.Create(gatheredValues);
+           db.Create(gatheredValues);
         }
      }
 }
