@@ -114,6 +114,6 @@ using UnityEngine;
             formdata["developmentpoints"] = values[37];
             formdata["accountid"] = values[38];
 
-            return (RequestData.Pull(url + controller + action, formdata));
+            RequestData.Pull(url + controller + action, formdata);
         }
     }

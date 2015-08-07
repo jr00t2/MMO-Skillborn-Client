@@ -6,13 +6,14 @@ using UnityEngine.UI;
 public class WindowManager : MonoBehaviour {
     public Transform LoginPanel;
     public Transform SelectionPanel;
+    public Transform CharCreate;
 	// Use this for initialization
 	void Start () {
         string scenename = Application.loadedLevelName;
         Debug.Log(scenename);
         if (scenename == "PhotonSpielplatz")
         {
-           //Instantiate(LoginPanel);
+           Instantiate(LoginPanel);
         }
 	}
 	
@@ -20,6 +21,10 @@ public class WindowManager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void GetCharacterCreation() {
+        Instantiate(CharCreate);
+    }
     public void GetCharacterSelection() {
         Instantiate(SelectionPanel);
     }
