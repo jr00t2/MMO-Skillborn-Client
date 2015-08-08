@@ -27,5 +27,6 @@ public class WindowManager : MonoBehaviour {
     }
     public void GetCharacterSelection() {
         Instantiate(SelectionPanel);
+        GameObject.Find("LoginPanel(Clone)").SetActive(false);
     }
 }

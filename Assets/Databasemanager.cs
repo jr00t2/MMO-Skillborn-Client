@@ -7,7 +7,7 @@ using UnityEngine;
 
     class Databasemanager : MonoBehaviour
     {
-        private string url = "127.0.0.1/";
+        private string url = "46.105.248.105/"; //127.0.0.1/;
         private string controller;
         private string action;
 
@@ -20,13 +20,13 @@ using UnityEngine;
             formdata["password"] = password;
             string[] response = RequestData.Pull(url + controller + action, formdata);
             if (response.Length > 1 && response[0] == "Login") {
-                WindowManager wm = GameObject.Find("_ACCOUNTINFO").GetComponent<WindowManager>();
+                WindowManager wm = GameObject.Find("_WINDOWMANAGER").GetComponent<WindowManager>();
                 wm.GetCharacterSelection();
-                Accountinformation ac = GetComponent<Accountinformation>();
+                Accountinformation ac = GameObject.Find("_ACCOUNTINFO").GetComponent<Accountinformation>();
                 ac.username = response[1];
                 ac.userId =Convert.ToInt32( response[2]);
                 ac.calculatedResult = response[3];
-                wm.LoginPanel.gameObject.SetActive(false);
+               wm.LoginPanel.gameObject.SetActive(false);
                 Debug.Log("yay");
             }
         }
