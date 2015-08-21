@@ -1,0 +1,19 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Databasemanager.cs">
+    <Files>
+      <File FileName="Assets\Databasemanager.cs" Line="118" Column="14" />
+      <File FileName="Assets\Accountinformation.cs" Line="8" Column="3" />
+      <File FileName="Assets\AccountPanel.cs" Line="24" Column="2" />
+      <File FileName="Assets\CharacterCreation.cs" Line="234" Column="2" />
+      <File FileName="Assets\CharacterSelection.cs" Line="41" Column="78" />
+      <File FileName="Assets\Networkmanager.cs" Line="95" Column="2" />
+      <File FileName="Assets\RequestData.cs" Line="23" Column="2" />
+      <File FileName="Assets\WindowManager.cs" Line="33" Column="2" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
